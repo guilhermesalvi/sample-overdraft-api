@@ -5,6 +5,9 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
 
 permissions:
   contents: read
@@ -25,10 +28,13 @@ jobs:
           dotnet-version: '9.0.x'
 
       - name: Restore Dependencies
-        run: dotnet restore
+        run: dotnet restore Overdraft.sln
 
       - name: Build Solution
-        run: dotnet build --configuration Release --no-restore
+        run: dotnet build Overdraft.sln --configuration Release --no-restore
 
       - name: Run Tests
-        run: dotnet test --configuration Release --no-build --verbosity normal
+        run: |
+          for proj in $(find tests -name "*.csproj"); do
+            dotnet test "$proj" --configuration Release --no-build --verbosity normal
+          done
