@@ -47,7 +47,8 @@ public static class PaymentChargeService
             OverLimitInterestDue = overLimitInterestDue,
             LatePaymentInterestDue = latePaymentInterestDue,
             LatePaymentPenaltyDue = latePaymentPenaltyDue,
-            TotalDue = totalDue
+            TotalDue = totalDue,
+            ReferenceDate = referenceDate
         };
     }
 
