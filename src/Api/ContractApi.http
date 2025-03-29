@@ -1,0 +1,24 @@
+@Api_HostAddress = http://localhost:5289/api/v1/contract/
+
+### Get Contract
+GET {{Api_HostAddress}}
+
+### Get Contract by ID
+GET {{Api_HostAddress}}?id=0195e2ee-6255-71f5-aa67-fb54bdfd2d91
+
+### Create Contract
+POST {{Api_HostAddress}}
+Accept: application/json
+Content-Type: application/json
+
+{
+  "gracePeriodDays": 5,
+  "monthlyInterestRate": 0.075,
+  "monthlyIofTax": 0.04,
+  "monthlyOverLimitInterestRate": 0.0774,
+  "monthlyLatePaymentInterestRate": 0.01,
+  "latePaymentPenaltyRate": 0.02
+}
+
+### Delete Contract
+DELETE {{Api_HostAddress}}?id=0195def1-cb05-7db4-b5bf-473bb9a05498

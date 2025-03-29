@@ -1,0 +1,21 @@
+@Api_HostAddress = http://localhost:5289/api/v1/account/
+
+### Get Account
+GET {{Api_HostAddress}}
+
+### Get Account by ID
+GET {{Api_HostAddress}}?id=0195e307-3e59-74b8-9f1b-4f23c2735b27
+
+### Create Account
+POST {{Api_HostAddress}}
+Accept: application/json
+Content-Type: application/json
+
+{
+  "contractId": "0195e306-726d-7d4e-817b-a5829c77d6d2",
+  "overdraftLimit": 10000,
+  "selectedLimit": 5000
+}
+
+### Delete Account
+DELETE {{Api_HostAddress}}?id=0195e307-3e59-74b8-9f1b-4f23c2735b27

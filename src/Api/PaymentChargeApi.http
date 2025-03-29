@@ -1,0 +1,13 @@
+@Api_HostAddress = http://localhost:5289/api/v1/payment-charge/
+
+### Calculate Payment Charge
+POST {{Api_HostAddress}}
+Accept: application/json
+Content-Type: application/json
+
+{
+  "contractId": "0195e306-726d-7d4e-817b-a5829c77d6d2",
+  "overdraftLimit": 10000,
+  "selectedLimit": 5000
+}
+

@@ -1,0 +1,32 @@
+﻿@Api_HostAddress = http://localhost:5289/api/v1/daily-limit
+
+### Get Daily Limit
+GET {{Api_HostAddress}}
+
+### Update Daily Limit
+POST {{Api_HostAddress}}
+Accept: application/json
+Content-Type: application/json
+
+[
+  {
+    "accountId": "0195def1-cb05-7db4-b5bf-473bb9a05498",
+    "currentBalance": -2500,
+    "referenceDate": "2025-03-26T00:00:00Z"
+  },
+  {
+    "accountId": "0195def1-cb05-7db4-b5bf-473bb9a05498",
+    "currentBalance": 0,
+    "referenceDate": "2025-03-27T00:00:00Z"
+  },
+  {
+    "accountId": "0195def1-cb05-7db4-b5bf-473bb9a05498",
+    "currentBalance": 1000,
+    "referenceDate": "2025-03-28T00:00:00Z"
+  },
+  {
+    "accountId": "0195def1-cb05-7db4-b5bf-473bb9a05498",
+    "currentBalance": -730,
+    "referenceDate": "2025-03-29T00:00:00Z"
+  }
+]
