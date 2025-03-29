@@ -2,10 +2,9 @@
 name: CI - Build and Test
 
 on:
-  pull_request:
-    types: [opened, synchronize, reopened]
+  push:
     branches:
-      - release
+      - main
 
 permissions:
   contents: read
