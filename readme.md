@@ -1,5 +1,7 @@
 # 🏦 Sample Overdraft API
 
+[![CI - Build and Test](https://github.com/guilhermesalvi/sample-overdraft-api/actions/workflows/dotnet.yml/badge.svg)](https://github.com/guilhermesalvi/sample-overdraft-api/actions/workflows/dotnet.yml)
+
 > 🚧 This project is currently under development and subject to change. Please check back later for more updates.
 
 This service is responsible for calculating monthly overdraft charges based on the customer's daily usage.
