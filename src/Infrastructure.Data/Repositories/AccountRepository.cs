@@ -8,7 +8,7 @@ namespace Overdraft.Infrastructure.Data.Repositories;
 public class AccountRepository(
     ApplicationDbContext context) : IAccountRepository
 {
-    public async Task<IEnumerable<Account>> GetAsync(
+    public async Task<List<Account>> GetAsync(
         Expression<Func<Account, bool>> predicate, CancellationToken cancellationToken)
     {
         var accounts = await context.Accounts

@@ -7,7 +7,7 @@ namespace Overdraft.Infrastructure.Data.Repositories;
 public class DailyLimitRepository(
     ApplicationDbContext context) : IDailyLimitRepository
 {
-    public async Task<IEnumerable<DailyLimit>> GetByReferenceDateAsync(
+    public async Task<List<DailyLimit>> GetByReferenceDateAsync(
         Guid? accountId,
         DateTimeOffset? startDate,
         DateTimeOffset? endDate,
@@ -17,6 +17,7 @@ public class DailyLimitRepository(
             .Where(x => accountId == null || x.AccountId == accountId.Value)
             .Where(x => startDate == null || x.ReferenceDate >= startDate.Value.Date)
             .Where(x => endDate == null || x.ReferenceDate <= endDate.Value.Date.AddDays(1).AddTicks(-1))
+            .OrderBy(x => x.ReferenceDate)
             .ToListAsync(cancellationToken);
 
         return dailyLimits;

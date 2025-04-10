@@ -12,50 +12,63 @@ public class CalculatePaymentChargeUseCase(
 {
     public async Task<PaymentCharge> Handle(CalculatePaymentChargeInput request, CancellationToken cancellationToken)
     {
-        var account = await accountRepository.GetBydIdAsync(request.AccountId, cancellationToken);
+        var result = await GetAccountAndContract(request, cancellationToken);
+        if (result is null) return null!;
 
+        var (account, contract) = result.Value;
+
+        var limits = await GetLimits(request, cancellationToken);
+        var charge = PaymentChargeService.CalculateCharge(account, contract, request.ReferenceDate, limits);
+
+        return charge;
+    }
+
+    private async Task<(Account Account, Contract Contract)?> GetAccountAndContract(
+        CalculatePaymentChargeInput request,
+        CancellationToken cancellationToken)
+    {
+        var account = await accountRepository.GetBydIdAsync(request.AccountId, cancellationToken);
         if (account is null)
         {
             notificationManager.AddNotification("AccountNotFound");
-            return null!;
+            return null;
         }
 
         var contract = await contractRepository.GetByIdAsync(account.ContractId, cancellationToken);
-
         if (contract is null)
         {
             notificationManager.AddNotification("ContractNotFound");
-            return null!;
+            return null;
         }
 
-        var startDate = FirstDayOfPreviousMonth(request.ReferenceDate);
-        var endDate = LastDayOfCurrentMonth(request.ReferenceDate);
-
-        var dailyLimits = await dailyLimitRepository.GetByReferenceDateAsync(
-            request.AccountId,
-            startDate,
-            endDate,
-            cancellationToken);
-
-        var paymentCharge = PaymentChargeService.CalculatePaymentCharge(
-            account,
-            contract,
-            dailyLimits,
-            request.ReferenceDate);
-
-        return paymentCharge;
+        return (account, contract);
     }
 
-    private static DateTimeOffset FirstDayOfPreviousMonth(DateTimeOffset referenceMonth)
+    private async Task<(List<DailyLimit> LastMonth, List<DailyLimit> CurrentMonth)> GetLimits(
+        CalculatePaymentChargeInput request,
+        CancellationToken cancellationToken)
     {
-        return new DateTimeOffset(referenceMonth.Year, referenceMonth.Month, 1, 0, 0, 0, referenceMonth.Offset)
-            .AddMonths(-1);
+        var lastMonth = request.ReferenceDate.AddMonths(-1);
+        var currentMonth = request.ReferenceDate;
+
+        var lastMonthLimitsTask = dailyLimitRepository.GetByReferenceDateAsync(
+            request.AccountId, FirstDay(lastMonth), LastDay(lastMonth), cancellationToken);
+
+        var currentMonthLimitsTask = dailyLimitRepository.GetByReferenceDateAsync(
+            request.AccountId, FirstDay(currentMonth), LastDay(currentMonth), cancellationToken);
+
+        await Task.WhenAll(lastMonthLimitsTask, currentMonthLimitsTask);
+
+        return (await lastMonthLimitsTask, await currentMonthLimitsTask);
     }
 
-    private static DateTimeOffset LastDayOfCurrentMonth(DateTimeOffset referenceMonth)
+    private static DateTimeOffset FirstDay(DateTimeOffset referenceMonth) =>
+        new(referenceMonth.Year, referenceMonth.Month, 1, 0, 0, 0, referenceMonth.Offset);
+
+    private static DateTimeOffset LastDay(DateTimeOffset referenceMonth)
     {
         var lastDay = DateTime.DaysInMonth(referenceMonth.Year, referenceMonth.Month);
-        return new DateTimeOffset(referenceMonth.Year, referenceMonth.Month, lastDay, 23, 59,
-            59, referenceMonth.Offset);
+        return new DateTimeOffset(referenceMonth.Year, referenceMonth.Month, lastDay, 23, 59, 59,
+            referenceMonth.Offset);
     }
 }

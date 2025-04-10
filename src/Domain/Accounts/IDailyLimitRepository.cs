@@ -2,7 +2,7 @@
 
 public interface IDailyLimitRepository
 {
-    Task<IEnumerable<DailyLimit>> GetByReferenceDateAsync(
+    Task<List<DailyLimit>> GetByReferenceDateAsync(
         Guid? accountId,
         DateTimeOffset? startDate,
         DateTimeOffset? endDate,

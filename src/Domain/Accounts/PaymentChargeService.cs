@@ -2,39 +2,21 @@
 
 public static class PaymentChargeService
 {
-    public static PaymentCharge CalculatePaymentCharge(
+    public static PaymentCharge CalculateCharge(
         Account account,
         Contract contract,
-        IEnumerable<DailyLimit> dailyLimits,
-        DateTimeOffset referenceDate)
+        DateTimeOffset referenceDate,
+        (List<DailyLimit> LastMonth, List<DailyLimit> CurrentMonth) limits)
     {
-        dailyLimits = dailyLimits.ToList();
+        var (lastMonthLimits, currentMonthLimits) = limits;
 
-        var referenceMonthDailyLimits = dailyLimits
-            .Where(x => x.ReferenceDate.Month == referenceDate.Month)
-            .OrderBy(x => x.ReferenceDate)
-            .ToList();
-
-        var lastMonthDailyLimits = dailyLimits
-            .Where(x => x.ReferenceDate.Month == referenceDate.AddMonths(-1).Month)
-            .OrderBy(x => x.ReferenceDate)
-            .ToList();
-
-        var usedDays = CalculateUsedDays(referenceMonthDailyLimits);
-        var iofTaxDue = CalculateIofTax(contract, referenceMonthDailyLimits);
-        var interestDue = CalculateInterestDue(usedDays, contract, referenceMonthDailyLimits);
-        var overLimitInterestDue = CalculateOverLimitInterestDue(account, contract, referenceMonthDailyLimits);
-        var latePaymentInterestDue =
-            CalculateLatePaymentInterestDue(contract, lastMonthDailyLimits, referenceMonthDailyLimits);
-        var latePaymentPenaltyDue =
-            CalculateLatePaymentPenaltyDue(contract, lastMonthDailyLimits);
-
-        var totalDue =
-            interestDue
-            + iofTaxDue
-            + overLimitInterestDue
-            + latePaymentInterestDue
-            + latePaymentPenaltyDue;
+        var usedDays = CountUsedDays(currentMonthLimits);
+        var iofTaxDue = CalculateIofTax(contract, currentMonthLimits);
+        var interestDue = CalculateInterestDue(contract, usedDays, currentMonthLimits);
+        var overLimitInterestDue = CalculateOverLimitInterestDue(account, contract, currentMonthLimits);
+        var latePaymentInterestDue = CalculateLatePaymentInterestDue(contract, lastMonthLimits, currentMonthLimits);
+        var latePaymentPenaltyDue = CalculateLatePaymentPenaltyDue(contract, lastMonthLimits);
+        var totalDue = interestDue + iofTaxDue + overLimitInterestDue + latePaymentInterestDue + latePaymentPenaltyDue;
 
         return new PaymentCharge
         {
@@ -48,54 +30,50 @@ public static class PaymentChargeService
             LatePaymentInterestDue = latePaymentInterestDue,
             LatePaymentPenaltyDue = latePaymentPenaltyDue,
             TotalDue = totalDue,
-            ReferenceDate = referenceDate
+            ReferenceDate = referenceDate,
+            CreatedAt = DateTimeOffset.UtcNow
         };
     }
 
-    private static int CalculateUsedDays(IEnumerable<DailyLimit> referenceMonthDailyLimits) =>
-        referenceMonthDailyLimits.Count(x => x.UsedLimit > 0);
+    private static int CountUsedDays(List<DailyLimit> limits) =>
+        limits.Count(x => x.UsedLimit > 0m);
 
-    private static decimal CalculateIofTax(Contract contract, IEnumerable<DailyLimit> referenceMonthDailyLimits) =>
-        referenceMonthDailyLimits.Sum(x => x.UsedLimit * contract.DailyIofTax);
+    private static decimal CalculateIofTax(Contract contract, List<DailyLimit> limits) =>
+        limits.Sum(x => x.UsedLimit * contract.DailyIofTax);
 
     private static decimal CalculateInterestDue(
-        int usedDays, Contract contract, IEnumerable<DailyLimit> referenceMonthDailyLimits) =>
+        Contract contract, int usedDays, List<DailyLimit> limits) =>
         usedDays > contract.GracePeriodDays
-            ? referenceMonthDailyLimits.Sum(x => x.UsedLimit * contract.DailyInterestRate)
-            : 0;
+            ? limits.Sum(x => x.UsedLimit * contract.DailyInterestRate)
+            : 0m;
 
     private static decimal CalculateOverLimitInterestDue(
-        Account account, Contract contract, IEnumerable<DailyLimit> referenceMonthDailyLimits) =>
-        referenceMonthDailyLimits
+        Account account, Contract contract, List<DailyLimit> limits)
+        => limits
             .Where(x => x.UsedLimit > account.OverdraftLimit)
             .Sum(x => (x.UsedLimit - account.OverdraftLimit) * contract.DailyOverLimitInterestRate);
 
+    private static decimal CalculateLatePaymentPenaltyDue(
+        Contract contract, List<DailyLimit> limits) =>
+        limits.LastOrDefault() is { UsedLimit: > 0m } last
+            ? last.UsedLimit * contract.LatePaymentPenaltyRate
+            : 0m;
+
     private static decimal CalculateLatePaymentInterestDue(
         Contract contract,
-        IEnumerable<DailyLimit> lastMonthDailyLimits,
-        IEnumerable<DailyLimit> referenceMonthDailyLimits)
-
+        List<DailyLimit> lastMonthLimits,
+        List<DailyLimit> currentMonthLimits)
     {
-        var lastDay = lastMonthDailyLimits.Last();
-        if (lastDay.UsedLimit == 0) return 0;
+        if (lastMonthLimits.LastOrDefault() is not { UsedLimit: > 0m } lastDay)
+            return 0m;
 
-        var totalLatePaymentInterestDue =
-            lastDay.UsedLimit * contract.DailyLatePaymentInterestRate +
-            referenceMonthDailyLimits
-                .TakeWhile(dailyLimit => dailyLimit.UsedLimit > 0)
-                .Sum(dailyLimit => dailyLimit.UsedLimit * contract.DailyLatePaymentInterestRate);
+        var rate = contract.DailyLatePaymentInterestRate;
+        var firstDay = lastDay.UsedLimit * rate;
 
-        return totalLatePaymentInterestDue;
-    }
+        var accrued = currentMonthLimits
+            .TakeWhile(x => x.UsedLimit > 0m)
+            .Sum(x => x.UsedLimit * rate);
 
-    private static decimal CalculateLatePaymentPenaltyDue(
-        Contract contract,
-        IEnumerable<DailyLimit> lastMonthDailyLimits)
-
-    {
-        var lastDay = lastMonthDailyLimits.Last();
-        if (lastDay.UsedLimit == 0) return 0;
-
-        return lastDay.UsedLimit * contract.LatePaymentPenaltyRate;
+        return firstDay + accrued;
     }
 }

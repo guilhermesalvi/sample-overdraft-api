@@ -4,7 +4,7 @@ namespace Overdraft.Domain.Accounts;
 
 public interface IContractRepository
 {
-    Task<IEnumerable<Contract>> GetAsync(
+    Task<List<Contract>> GetAsync(
         Expression<Func<Contract, bool>> predicate, CancellationToken cancellationToken);
 
     Task<Contract?> GetByIdAsync(Guid id, CancellationToken cancellationToken);

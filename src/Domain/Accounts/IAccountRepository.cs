@@ -4,7 +4,7 @@ namespace Overdraft.Domain.Accounts;
 
 public interface IAccountRepository
 {
-    Task<IEnumerable<Account>> GetAsync(
+    Task<List<Account>> GetAsync(
         Expression<Func<Account, bool>> predicate, CancellationToken cancellationToken);
 
     Task<Account?> GetBydIdAsync(Guid id, CancellationToken cancellationToken);
