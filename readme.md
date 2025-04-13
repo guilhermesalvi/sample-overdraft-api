@@ -149,6 +149,22 @@ On April 12, customer used R$700
 
 ---
 
+## 🎳  Main Components
+
+### Contract
+
+A contract is a financial agreement between the bank and the customer, defining the overdraft limit and grace period.
+
+### Account
+
+An account is a financial record that tracks the customer's balance, overdraft usage, and any applicable charges.
+
+### Transaction
+
+A transaction is a record of a financial operation, such as a deposit or withdrawal, that affects the account balance.
+
+---
+
 ## 🗂️ Project Structure
 
 ```
@@ -156,6 +172,7 @@ sample-overdraft-api/
 │
 ├── src/
 │   ├── Api/
+│   │  ├── Features/
 │
 ├── tests/
 │   ├── IntegrationTests/

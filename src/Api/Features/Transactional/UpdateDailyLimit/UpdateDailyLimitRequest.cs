@@ -1,6 +1,6 @@
 ﻿using Overdraft.Api.Models;
 
-namespace Overdraft.Api.Features.Accounting.UpdateDailyLimit;
+namespace Overdraft.Api.Features.Transactional.UpdateDailyLimit;
 
 public record UpdateDailyLimitRequest(
     List<UpdateDailyLimitItem> Items);

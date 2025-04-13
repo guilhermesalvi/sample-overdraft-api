@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <Folder Include="Features\Contracting\" />
+    <Folder Include="Features\Transactional\" />
   </ItemGroup>
 
 </Project>

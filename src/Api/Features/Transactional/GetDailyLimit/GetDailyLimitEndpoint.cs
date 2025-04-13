@@ -2,7 +2,7 @@
 using Overdraft.Api.Data;
 using Overdraft.Api.Models;
 
-namespace Overdraft.Api.Features.Accounting.GetDailyLimit;
+namespace Overdraft.Api.Features.Transactional.GetDailyLimit;
 
 public static class GetDailyLimitEndpoint
 {

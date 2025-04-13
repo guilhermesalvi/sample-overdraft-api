@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using Overdraft.Api.Data;
 
-namespace Overdraft.Api.Features.Accounting.CalculatePaymentCharge;
+namespace Overdraft.Api.Features.Transactional.CalculatePaymentCharge;
 
 public class CalculatePaymentChargeRequestValidator : AbstractValidator<CalculatePaymentChargeRequest>
 {

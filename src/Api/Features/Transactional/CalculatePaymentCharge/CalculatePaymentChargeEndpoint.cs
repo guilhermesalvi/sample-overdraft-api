@@ -2,14 +2,14 @@
 using Overdraft.Api.Data;
 using Overdraft.Api.SeedWork.Filters;
 
-namespace Overdraft.Api.Features.Accounting.CalculatePaymentCharge;
+namespace Overdraft.Api.Features.Transactional.CalculatePaymentCharge;
 
 public static class CalculatePaymentChargeEndpoint
 {
     public static void MapCalculatePaymentChargeEndpoint(this RouteGroupBuilder builder)
     {
         builder
-            .MapPost("", CalculatePaymentCharge)
+            .MapPost("payment-charge", CalculatePaymentCharge)
             .AddEndpointFilter(new ValidationFilter<CalculatePaymentChargeRequest>())
             .Accepts<CalculatePaymentChargeRequest>("application/json")
             .Produces<CalculatePaymentChargeResponse>()

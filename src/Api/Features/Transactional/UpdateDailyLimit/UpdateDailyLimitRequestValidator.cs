@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using Overdraft.Api.Data;
 
-namespace Overdraft.Api.Features.Accounting.UpdateDailyLimit;
+namespace Overdraft.Api.Features.Transactional.UpdateDailyLimit;
 
 public class UpdateDailyLimitRequestValidator : AbstractValidator<UpdateDailyLimitRequest>
 {

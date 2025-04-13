@@ -2,7 +2,7 @@
 using Overdraft.Api.Data;
 using Overdraft.Api.SeedWork.Filters;
 
-namespace Overdraft.Api.Features.Accounting.UpdateDailyLimit;
+namespace Overdraft.Api.Features.Transactional.UpdateDailyLimit;
 
 public static class UpdateDailyLimitEndpoint
 {
