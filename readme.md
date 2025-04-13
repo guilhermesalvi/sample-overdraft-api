@@ -171,7 +171,7 @@ sample-overdraft-api/
 - [C#](https://docs.microsoft.com/pt-br/dotnet/csharp/)
 - [ASP.NET Core](https://learn.microsoft.com/pt-br/aspnet/core/?view=aspnetcore-9.0&viewFallbackFrom=aspnetcore-9)
 - [Serilog](https://github.com/serilog/serilog)
-- [Entity Framework Core](https://docs.microsoft.com/pt-br/ef/core/)
+- [Dapper]()
 - [Docker](https://www.docker.com/)
 - [Docker Compose](https://docs.docker.com/compose/)
 - [xUnit](https://xunit.net/)

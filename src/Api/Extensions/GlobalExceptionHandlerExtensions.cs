@@ -14,7 +14,7 @@ public static class GlobalExceptionHandlerExtensions
 
 internal sealed class GlobalExceptionHandler(
     ILogger<GlobalExceptionHandler> logger,
-    ProblemDetailsFactory problemDetailsFactory) : IExceptionHandler
+    IServiceProvider serviceProvider) : IExceptionHandler
 {
     public async ValueTask<bool> TryHandleAsync(
         HttpContext httpContext,
@@ -23,6 +23,8 @@ internal sealed class GlobalExceptionHandler(
     {
         logger.LogError(exception, "An unhandled exception occurred while processing the request");
 
+        using var scope = serviceProvider.CreateScope();
+        var problemDetailsFactory = scope.ServiceProvider.GetRequiredService<ProblemDetailsFactory>();
         var problemDetails = problemDetailsFactory.CreateProblemDetails(
             httpContext,
             statusCode: StatusCodes.Status500InternalServerError,

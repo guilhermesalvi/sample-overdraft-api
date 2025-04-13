@@ -13,8 +13,16 @@ try
 
     // Add services to the container.
     builder.Services.AddGlobalExceptionHandler();
+    builder.AddEndpoints();
     builder.Services.AddVersioning();
     builder.Services.AddDocumentation();
+    builder.Services.AddData(builder.Configuration);
+
+    builder.Host.UseDefaultServiceProvider(options =>
+    {
+        options.ValidateOnBuild = true;
+        options.ValidateScopes = true;
+    });
 
     var app = builder.Build();
 
