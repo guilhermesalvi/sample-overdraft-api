@@ -22,8 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\Contracting\" />
-    <Folder Include="Features\Transactional\" />
+    <Folder Include="Features\" />
   </ItemGroup>
 
 </Project>

@@ -16,7 +16,6 @@ try
     builder.AddEndpoints();
     builder.Services.AddVersioning();
     builder.Services.AddDocumentation();
-    builder.Services.AddData(builder.Configuration);
 
     builder.Host.UseDefaultServiceProvider(options =>
     {
