@@ -6,9 +6,11 @@
 
 This service is responsible for calculating monthly overdraft charges based on the customer's daily usage.
 
-The calculation runs automatically at the beginning of each month and evaluates the customer’s usage from the **previous month**, including their balance status when the month rolls over.
+The calculation runs automatically at the beginning of each month and evaluates the customer’s usage from the **previous
+month**, including their balance status when the month rolls over.
 
-> ⚠️ **Note:** The business rules applied in this service are based on Brazilian financial regulations and banking practices.
+> ⚠️ **Note:** The business rules applied in this service are based on Brazilian financial regulations and banking
+> practices.
 
 ---
 
@@ -23,13 +25,15 @@ This service applies the following financial rules:
   The standard daily interest charged after the grace period ends.
 
 - 💰 **Credit Tax (formerly IOF)**  
-  A government-imposed tax applied to financial operations. It includes both a fixed rate and a daily rate, calculated proportionally to the amount and duration of overdraft usage.
+  A government-imposed tax applied to financial operations. It includes both a fixed rate and a daily rate, calculated
+  proportionally to the amount and duration of overdraft usage.
 
 - 🚨 **Over-limit Interest**  
   Additional interest applied on any usage that exceeds the overdraft limit.
 
 - ⏰ **Late Payment Interest**  
-  Daily interest charged if the customer ends the previous month with a negative balance and does not settle it in the following days.
+  Daily interest charged if the customer ends the previous month with a negative balance and does not settle it in the
+  following days.
 
 - ⚠️ **Penalty**  
   A one-time fine applied when a customer rolls over into a new month with an outstanding negative balance.
@@ -56,7 +60,7 @@ This service applies the following financial rules:
 This table summarizes which charges apply based on the customer's overdraft usage and behavior.
 
 | Situation                                                 | Credit Tax | Regular Interest | Over-limit Interest | Penalty | Late Interest |
-|-----------------------------------------------------------|-------------|------------------|---------------------|---------|---------------|
+|-----------------------------------------------------------|------------|------------------|---------------------|---------|---------------|
 | Did not use overdraft                                     | ❌          | ❌                | ❌                   | ❌       | ❌             |
 | Used overdraft within grace and paid before month end     | ✅          | ❌                | ❌                   | ❌       | ❌             |
 | Used overdraft, exceeded grace, and paid before month end | ✅          | ✅                | ❌                   | ❌       | ❌             |
@@ -69,26 +73,20 @@ This table summarizes which charges apply based on the customer's overdraft usag
 
 ## 📘 Glossary
 
-| Term                      | Description                                                                 |
-|---------------------------|-----------------------------------------------------------------------------|
-| **Principal Amount**       | The amount of overdraft used by the customer                                |
-| **Approved Overdraft Limit**        | The agreed overdraft limit on the account                                   |
-| **Self-declared Limit**     | The limit optionally defined by the customer for personal control            |
-| **Used Over-limit**         | Amount exceeding the approved overdraft limit                               |
-| **Grace Period Days**       | Number of days without interest accrual                                     |
-| **Interest Rate** | Daily interest rate applied to principal usage                              |
-| **Credit Tax Rate** | Daily rate used to calculate government-imposed tax on the overdraft        |
-| **Fixed Credit Tax Rate** | Fixed rate tax applied once when the overdraft is first used               |
-| **Over-limit Rate** | Interest rate applied to the over-limit portion                             |
-| **Late Payment Rate** | Interest rate applied after overdue period (post rollover)                  |
-| **Penalty Rate** | One-time fine rate applied when debt rolls over into a new month            |
-| **Interest** | Interest amount for the reference date | Interest amount due on the reference date                                   |
-| **Credit Tax** | Daily portion of tax calculated on the overdraft used | Daily portion of credit tax calculated on the overdraft used                 |
-| **Fixed Credit Tax** | One-time tax charged at the first use of overdraft | Fixed tax amount charged at first use of overdraft                          |
-| **Over-limit Interest** | Interest charged on the amount exceeding the overdraft limit | Interest charged on amount exceeding the overdraft limit                    |
-| **Late Payment Interest** | Interest charged on overdue balance from previous cycle | Interest charged on overdue balance from previous cycle                     |
-| **Late Payment Penalty** | Fixed penalty when balance rolls into a new month | Fixed penalty amount charged when balance carries into a new month          |
-| **Total Charges** | Sum of all charges due for the reference day | Total of all charges due for the reference day                              |
+| Term                         | Description                                                          |
+|------------------------------|----------------------------------------------------------------------|
+| **Principal Amount**         | The amount of overdraft used by the customer                         |
+| **Approved Overdraft Limit** | The agreed overdraft limit on the account                            |
+| **Self-declared Limit**      | The limit optionally defined by the customer for personal control    |
+| **Used Over-limit**          | Amount exceeding the approved overdraft limit                        |
+| **Grace Period Days**        | Number of days without interest accrual                              |
+| **Interest Rate**            | Daily interest rate applied to principal usage                       |
+| **Credit Tax Rate**          | Daily rate used to calculate government-imposed tax on the overdraft |
+| **Fixed Credit Tax Rate**    | Fixed rate tax applied once when the overdraft is first used         |
+| **Over-limit Rate**          | Interest rate applied to the over-limit portion                      |
+| **Late Payment Rate**        | Interest rate applied after overdue period (post rollover)           |
+| **Penalty Rate**             | One-time fine rate applied when debt rolls over into a new month     |
+| **Total Charges**            | Sum of all charges due for the reference day                         |
 
 ---
 
@@ -157,19 +155,23 @@ On April 12, customer used R$700
 - ✅ **Over-limit interest** is applied on the R$200 excess
 - ✅ Credit Tax also applies on the full amount used
 
-> ℹ️ These examples illustrate how charges are applied based on real-world overdraft usage patterns and Brazilian banking rules.
+> ℹ️ These examples illustrate how charges are applied based on real-world overdraft usage patterns and Brazilian
+> banking rules.
 
 ---
 
-## 🎳  Main Components
+## 🎳 Main Components
 
 ### Contract
+
 A contract is a financial agreement between the bank and the customer, defining the overdraft terms.
 
 ### Account
+
 An account represents the customer's financial profile, usage limits, and daily debt snapshots.
 
 ### DailyLimitUsageEntry
+
 A daily snapshot that captures the account state, applicable rates, and calculated charges for that specific day.
 
 ---
