@@ -1,4 +1,5 @@
 using Overdraft.Api.Extensions;
+using Overdraft.Infrastructure.Extensions;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()
@@ -16,6 +17,7 @@ try
     builder.AddEndpoints();
     builder.Services.AddVersioning();
     builder.Services.AddDocumentation();
+    builder.Services.AddData(builder.Configuration);
 
     builder.Host.UseDefaultServiceProvider(options =>
     {
