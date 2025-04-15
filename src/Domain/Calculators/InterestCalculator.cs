@@ -26,10 +26,10 @@ public static class InterestCalculator
         return rolloverPrincipal * contract.DailyLatePaymentInterestRate;
     }
 
-    public static decimal CalculateLatePaymentPenalty(decimal rolloverBalance, Contract contract)
+    public static decimal CalculateLatePaymentPenalty(decimal rolloverPrincipal, Contract contract, bool hasAlreadyApplied)
     {
-        return rolloverBalance < 0
-            ? rolloverBalance * contract.LatePaymentPenaltyRate
+        return !hasAlreadyApplied && rolloverPrincipal > 0
+            ? rolloverPrincipal * contract.LatePaymentPenaltyRate
             : 0m;
     }
 
