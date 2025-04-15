@@ -18,8 +18,6 @@ The calculation runs automatically at the beginning of each month and evaluates 
 
 > ⚠️ **Note:** The business rules applied in this service are based on Brazilian financial regulations and banking practices.
 
----
-
 ## 📋 Business Rules
 
 > 💡 Although charges are accrued daily, the customer is only billed monthly for the total amount due from the previous cycle.
@@ -44,8 +42,6 @@ This service applies the following financial rules:
 - ⚠️ **Penalty (formerly Multa de Mora)**  
   A one-time fine applied when a customer rolls over into a new month with an outstanding negative balance.
 
----
-
 ## 📆 Monthly Timeline
 
 ```text
@@ -60,8 +56,6 @@ This service applies the following financial rules:
   │  └── Balance is negative at month end → apply Penalty and Late Payment Interest
 ```
 
----
-
 ## 📊 Practical Charging Rules
 
 This table summarizes which charges apply based on the customer's overdraft usage and behavior.
@@ -75,8 +69,6 @@ This table summarizes which charges apply based on the customer's overdraft usag
 | Used overdraft within grace and didn’t pay by month end   | ✅          | ❌                | ❌                   | ✅       | ✅             |
 | Used overdraft, exceeded grace, and didn’t pay            | ✅          | ✅                | ❌                   | ✅       | ✅             |
 | Used overdraft, exceeded limit, and didn’t pay            | ✅          | ✅                | ✅                   | ✅       | ✅             |
-
----
 
 > ℹ️ Although charges are accrued daily, they are only billed to the customer once per month.
 
@@ -100,8 +92,6 @@ This table summarizes which charges apply based on the customer's overdraft usag
 | **Contract Agreement**      | Formal link between an account and a contract, including signature date     |
 | **Daily Limit Usage Entry** | Daily snapshot with state, applied rates, and calculated charges            |
 | **Capitalization**          | The process of incorporating the interest accrued during a billing cycle into the principal balance, so that the new total earns interest in the next cycle (compound interest). |
-
----
 
 ## 🧪 Examples
 
@@ -220,4 +210,3 @@ During the month, interest and taxes accumulated to R$75.
 
 > ℹ️ These examples illustrate how charges are applied based on real-world overdraft usage patterns and Brazilian banking rules.
 
----
