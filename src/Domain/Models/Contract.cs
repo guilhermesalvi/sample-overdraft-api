@@ -1,4 +1,4 @@
-﻿namespace Overdraft.Domain.Accounts;
+﻿namespace Overdraft.Domain.Models;
 
 public record Contract
 {

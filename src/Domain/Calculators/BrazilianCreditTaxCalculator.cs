@@ -1,9 +1,9 @@
-namespace Overdraft.Domain.CreditTaxCalculator;
+namespace Overdraft.Domain.Calculators;
 
 public static class BrazilianCreditTaxCalculator
 {
-    private const decimal DailyTaxRate = 0.000082m;
-    private const decimal FixedTaxRate = 0.0038m;
+    public const decimal DailyTaxRate = 0.000082m;
+    public const decimal FixedTaxRate = 0.0038m;
 
     public static decimal CalculateCreditTax(decimal principal)
     {

@@ -1,4 +1,6 @@
-namespace Overdraft.Domain.Accounts;
+using Overdraft.Domain.Models;
+
+namespace Overdraft.Domain.Calculators;
 
 public static class InterestCalculator
 {
