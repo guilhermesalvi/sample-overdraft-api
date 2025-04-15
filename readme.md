@@ -24,7 +24,7 @@ This service applies the following financial rules:
 - 📈 **Regular Interest**  
   The standard daily interest charged after the grace period ends.
 
-- 💰 **Credit Tax (formerly IOF)**  
+- 💰 **Credit Tax (formerly IOF - _Imposto sobre Operações Financeiras_)**  
   A government-imposed tax applied to financial operations. It includes both a fixed rate and a daily rate, calculated proportionally to the amount and duration of overdraft usage.
 
 - 🚨 **Over-limit Interest**  
@@ -171,32 +171,3 @@ On April 12, customer used R$700
 > ℹ️ These examples illustrate how charges are applied based on real-world overdraft usage patterns and Brazilian banking rules.
 
 ---
-
-## 🗂️ Project Structure
-
-```
-sample-overdraft-api/
-│
-├── src/
-│   ├── Api/
-│   │  ├── Features/
-│
-├── tests/
-│   ├── IntegrationTests/
-│   ├── UnitTests/
-│
-└── Overdraft.sln
-```
-
----
-
-## ⚙️ Technologies Used
-
-- [C#](https://docs.microsoft.com/pt-br/dotnet/csharp/)
-- [ASP.NET Core](https://learn.microsoft.com/pt-br/aspnet/core/?view=aspnetcore-9.0&viewFallbackFrom=aspnetcore-9)
-- [Serilog](https://github.com/serilog/serilog)
-- [Dapper]()
-- [Docker](https://www.docker.com/)
-- [Docker Compose](https://docs.docker.com/compose/)
-- [xUnit](https://xunit.net/)
-- [FluentAssertions](https://github.com/fluentassertions/fluentassertions)

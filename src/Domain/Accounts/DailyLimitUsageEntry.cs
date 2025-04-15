@@ -1,4 +1,4 @@
-﻿namespace Overdraft.Api.Models;
+﻿namespace Overdraft.Domain.Accounts;
 
 public record DailyLimitUsageEntry
 {

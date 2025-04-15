@@ -1,7 +1,7 @@
 ﻿using Serilog.Core;
 using Serilog.Core.Enrichers;
 
-namespace Overdraft.Api.SeedWork.Logging;
+namespace Overdraft.Application.Logging;
 
 public class LogEnricherBuilder
 {

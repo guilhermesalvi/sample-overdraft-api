@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace Overdraft.Api.SeedWork.Filters;
+namespace Overdraft.Api.Filters;
 
 public class ValidationFilter<T> : IEndpointFilter where T : class
 {
@@ -23,6 +23,5 @@ public class ValidationFilter<T> : IEndpointFilter where T : class
             );
 
         return Results.ValidationProblem(errors);
-
     }
 }
