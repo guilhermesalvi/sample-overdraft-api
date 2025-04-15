@@ -2,6 +2,14 @@
 
 [![CI - Build and Test](https://github.com/guilhermesalvi/sample-overdraft-api/actions/workflows/dotnet.yml/badge.svg)](https://github.com/guilhermesalvi/sample-overdraft-api/actions/workflows/dotnet.yml)
 
+### 📚 Table of Contents
+
+- [📋 Business Rules](#-business-rules)
+- [📆 Monthly Timeline](#-monthly-timeline)
+- [📊 Practical Charging Rules](#-practical-charging-rules)
+- [📘 Glossary](#-glossary)
+- [🧪 Examples](#-examples)
+
 > 🚧 This project is currently under development and subject to change. Please check back later for more updates.
 
 This service is responsible for calculating monthly overdraft charges based on the customer's daily usage.
@@ -18,22 +26,22 @@ The calculation runs automatically at the beginning of each month and evaluates 
 
 This service applies the following financial rules:
 
-- 🛡️ **Grace Period**  
+- 🛡️ **Grace Period (formerly Dias de Carência)**  
   A predefined number of days during which no interest is charged on overdraft usage.
 
-- 📈 **Regular Interest**  
+- 📈 **Regular Interest (formerly Juros Remuneratórios)**  
   The standard daily interest charged after the grace period ends.
 
 - 💰 **Credit Tax (formerly IOF - _Imposto sobre Operações Financeiras_)**  
   A government-imposed tax applied to financial operations. It includes both a fixed rate and a daily rate, calculated proportionally to the amount and duration of overdraft usage.
 
-- 🚨 **Over-limit Interest**  
+- 🚨 **Over-limit Interest (formerly AD - _Adiantamento a Depositante_)**  
   Additional interest applied on any usage that exceeds the overdraft limit.
 
-- ⏰ **Late Payment Interest**  
+- ⏰ **Late Payment Interest (formerly Juros de Mora)**  
   Daily interest charged if the customer ends the previous month with a negative balance and does not settle it in the following days.
 
-- ⚠️ **Penalty**  
+- ⚠️ **Penalty (formerly Multa de Mora)**  
   A one-time fine applied when a customer rolls over into a new month with an outstanding negative balance.
 
 ---
@@ -42,16 +50,14 @@ This service applies the following financial rules:
 
 ```text
 [Month N]
-  ├── Daily usage is recorded
-  └── End of month: system checks if the account ended negative
+  └── Daily system generates Daily Limit Usage Entries and applies applicable fees but does not yet charge the customer
 
 [Month N+1]
-  ├── Day 1: system generates Daily Limit Usage Entries and applies applicable charges
-  ├── If balance is still negative → apply penalty + start daily late interest
-  └── If balance becomes zero → stop late interest accrual
-  ├── Day 1: charges are calculated
-  ├── If balance is still negative → apply penalty + start daily late interest
-  └── If balance becomes zero → stop late interest accrual
+  ├── System calculates charges for Month N
+  │  ├── Customer used overdraft → apply Credit Tax
+  │  ├── Used overdraft and exceeded grace period → apply Regular Interest
+  │  ├── Exceeded limit → apply Over-limit Interest
+  │  └── Balance is negative at month end → apply Penalty and Late Payment Interest
 ```
 
 ---
@@ -89,17 +95,11 @@ This table summarizes which charges apply based on the customer's overdraft usag
 | **Over-limit Rate**         | Interest rate applied to the over-limit portion                             |
 | **Late Payment Rate**       | Interest rate applied after overdue period (post rollover)                  |
 | **Penalty Rate**            | One-time fine rate applied when debt rolls over into a new month            |
-| **Interest**                | Interest amount due on the reference date                                   |
-| **Credit Tax**              | Daily portion of credit tax calculated on the overdraft used                 |
-| **Fixed Credit Tax**        | Fixed tax amount charged at first use of overdraft                          |
-| **Over-limit Interest**     | Interest charged on amount exceeding the overdraft limit                    |
-| **Late Payment Interest**   | Interest charged on overdue balance from previous cycle                     |
-| **Late Payment Penalty**    | Fixed penalty amount charged when balance carries into a new month          |
-| **Total Charges**           | Total of all charges due for the reference day                              |
 | **Contract**                | Defines the terms of overdraft usage between bank and customer              |
 | **Account**                 | Represents the customer's overdraft-enabled account and its usage data      |
 | **Contract Agreement**      | Formal link between an account and a contract, including signature date     |
 | **Daily Limit Usage Entry** | Daily snapshot with state, applied rates, and calculated charges            |
+| **Capitalization**          | The process of incorporating the interest accrued during a billing cycle into the principal balance, so that the new total earns interest in the next cycle (compound interest). |
 
 ---
 
@@ -116,9 +116,11 @@ Customer ends **April** with **-R$100**
 
 **What happens:**
 
-- ✅ A **penalty** is applied on May 1st (based on -R$100 from April)
-- ✅ **Late payment interest** is charged daily until May 4th
-- ❌ No charges after May 5th
+- **Credit Tax** is charged on all used days in April
+- **Regular interest** is charged on all used days in April
+- A **penalty** is applied on May 1st (based on -R$100 from April)
+- **Late payment interest** is charged daily until May 4th
+- No charges after May 5th
 
 ### Case 2: Exceeded Grace Period
 
@@ -128,9 +130,10 @@ Customer uses overdraft for 10 days in April
 
 **What happens:**
 
-- ✅ **Credit Tax** is charged on all 10 days
-- ✅ **Regular interest** is charged on all 10 days
-- ❌ Grace period does **not** exempt only the first 5 days — once exceeded, **all days** are charged
+- **Credit Tax** is charged on all 10 days
+- **Regular interest** is charged on all 10 days
+- Grace period **does not** exempt only the first 5 days — once exceeded, **all days** are charged
+- No penalty or late interest, since month did not end negative
 
 ### Case 3: Stayed Within Grace Period
 
@@ -140,9 +143,9 @@ Customer used overdraft for 3 days in April
 
 **What happens:**
 
-- ✅ Only **Credit Tax** is charged
-- ❌ No **regular interest**, since usage stayed within grace period
-- ❌ No penalty or late interest, since month did not end negative
+- Only **Credit Tax** is charged
+- No **regular interest**, since usage stayed within grace period
+- No **penalty** or **late interest**, since month did not end negative
 
 ### Case 4: Used Limit, Then Paid Off Mid-Month
 
@@ -152,9 +155,9 @@ Balance was zero from April 11 onward
 
 **What happens:**
 
-- ✅ Credit Tax and interest are applied only for the days with negative balance
-- ❌ No charges for days with zero balance
-- ❌ No penalty or late interest, since balance was cleared before end of the month
+- Credit Tax and interest are applied only for the days with negative balance
+- No charges for days with zero balance
+- No penalty or late interest, since balance was cleared before end of the month
 
 ### Case 5: Exceeded Overdraft Limit
 
@@ -164,9 +167,56 @@ On April 12, customer used R$700
 
 **What happens:**
 
-- ✅ Interest is applied on full R$700
-- ✅ **Over-limit interest** is applied on the R$200 excess
-- ✅ Credit Tax also applies on the full amount used
+- **Credit Tax** is charged on the full R$700
+- **Interest** is applied on R$500
+- **Over-limit interest** is applied on the R$200 excess
+
+### Case 6: First Use Triggers Fixed Credit Tax
+
+**Scenario:**  
+Customer starts using overdraft on May 3 for the first time in the month
+
+**Outcome:**
+
+- Fixed Credit Tax is charged once on May 3
+- Daily Credit Tax is applied starting from May 3 while balance is negative
+- **Interest** is applied on all days since May 3 - if customer does not have a grace period
+
+### Case 7: Overdraft Usage Spans Two Periods Within Grace Period
+
+**Scenario:**  
+Customer uses overdraft from April 1–2, repays, then again from April 25–26  
+Contract allows 5 grace days
+
+**Outcome:**
+
+- Total used days = 4 (within grace)
+- Only Credit Tax is charged for those 4 days
+- No interest or penalty applied
+
+### Case 8: Late Interest Stops After Repayment
+
+**Scenario:**  
+Customer ends April with -R$500 and repays on May 4
+
+**Outcome:**
+
+- Penalty is applied on May 1st
+- Late payment interest is charged from May 1–3
+- No charges after May 4
+
+### Case 9: Capitalization of Monthly Charges
+
+**Scenario:**  
+Customer ends **April** with a total overdraft usage of -R$1,000.  
+During the month, interest and taxes accumulated to R$75.
+
+**Outcome:**
+
+- On May 1st, the system capitalizes the charges:  
+  `New principal = R$1,000 + R$75 = R$1,075`
+- For May, daily charges will be calculated based on this new principal.
+- This exemplifies how **compound interest** emerges from capitalizing previous charges.
 
 > ℹ️ These examples illustrate how charges are applied based on real-world overdraft usage patterns and Brazilian banking rules.
 

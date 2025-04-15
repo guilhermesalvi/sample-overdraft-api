@@ -18,10 +18,10 @@ public static class InterestCalculator
         return excess * contract.DailyOverLimitInterestRate;
     }
 
-    public static decimal CalculateLatePaymentInterest(decimal principal, Contract contract)
+    public static decimal CalculateLatePaymentInterest(decimal rolloverPrincipal, Contract contract)
     {
-        if (principal <= 0) return 0m;
-        return principal * contract.DailyLatePaymentInterestRate;
+        if (rolloverPrincipal <= 0) return 0m;
+        return rolloverPrincipal * contract.DailyLatePaymentInterestRate;
     }
 
     public static decimal CalculateLatePaymentPenalty(decimal rolloverBalance, Contract contract)
@@ -30,4 +30,14 @@ public static class InterestCalculator
             ? rolloverBalance * contract.LatePaymentPenaltyRate
             : 0m;
     }
+
+    public static decimal CalculateTotalInterest(
+        decimal principalInterest,
+        decimal overLimitInterest,
+        decimal latePaymentInterest,
+        decimal latePaymentPenalty) =>
+        principalInterest + overLimitInterest + latePaymentInterest + latePaymentPenalty;
+
+    public static decimal CapitalizeMonthlyInterest(decimal principal, decimal totalInterest) =>
+        principal + totalInterest;
 }
