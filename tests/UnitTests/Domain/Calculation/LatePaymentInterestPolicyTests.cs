@@ -6,103 +6,88 @@ namespace UnitTests.Domain.Calculation;
 
 public class LatePaymentInterestPolicyTests
 {
-    [Fact(DisplayName = "Calculate late payment interest when all principal amounts are positive")]
-    public void Calculate_late_payment_interest_when_all_principal_amounts_are_positive()
+    [Fact(DisplayName = "Calculate interest using contract daily late-payment rate derived from monthly rate")]
+    public void Calculate_interest_using_contract_daily_late_payment_rate_derived_from_monthly_rate()
     {
         // Arrange
-        const decimal principalAmount1 = 100m;
-        const decimal principalAmount2 = 200m;
-        const decimal monthlyLatePaymentInterestRate = 0.06m;
-        const decimal expectedInterest = (principalAmount1 + principalAmount2) * (monthlyLatePaymentInterestRate / 30);
-
-        var lateDays = new List<DailyLimitUsageEntry>
+        const decimal monthlyLateRate = 0.09m;
+        var contract = new Contract { MonthlyLatePaymentInterestRate = monthlyLateRate };
+        var entryDate1 = new DateOnly(2025, 4, 25);
+        var entryDate2 = new DateOnly(2025, 4, 28);
+        const decimal principal1 = 100m;
+        const decimal principal2 = 200m;
+        var limits = new List<DailyLimitUsageEntry>
         {
-            new() { PrincipalAmount = principalAmount1 },
-            new() { PrincipalAmount = principalAmount2 }
+            new() { ReferenceDate = entryDate1, PrincipalAmount = principal1 },
+            new() { ReferenceDate = entryDate2, PrincipalAmount = principal2 }
         };
-
-        var contract = new Contract
-        {
-            MonthlyLatePaymentInterestRate = monthlyLatePaymentInterestRate
-        };
+        const decimal expectedRate = monthlyLateRate / 30;
+        const decimal expected = principal2 * expectedRate;
 
         // Act
-        var result = LatePaymentInterestPolicy.Calculate(lateDays, contract);
+        var result = LatePaymentInterestPolicy.Calculate(limits, contract);
 
         // Assert
-        result.Should().Be(expectedInterest);
+        result.Should().Be(expected);
     }
 
-    [Fact(DisplayName = "Calculate late payment interest when principal amounts include zero and negative values")]
-    public void Calculate_late_payment_interest_when_principal_amounts_include_zero_and_negative_values()
+    [Theory(DisplayName = "Calculate interest returns zero when last principal amount is non-positive")]
+    [InlineData(0)]
+    [InlineData(-150.25)]
+    public void Calculate_interest_returns_zero_when_last_principal_amount_is_non_positive(decimal lastPrincipal)
     {
         // Arrange
-        const decimal principalAmountPositive = 150m;
-        const decimal principalAmountNegative = -50m;
-        const decimal principalAmountZero = 0m;
-        const decimal monthlyLatePaymentInterestRate = 0.03m;
-        const decimal expectedInterest = principalAmountPositive * (monthlyLatePaymentInterestRate / 30);
-
-        var lateDays = new List<DailyLimitUsageEntry>
+        const decimal monthlyLateRate = 0.05m;
+        var contract = new Contract { MonthlyLatePaymentInterestRate = monthlyLateRate };
+        var limits = new List<DailyLimitUsageEntry>
         {
-            new() { PrincipalAmount = principalAmountPositive },
-            new() { PrincipalAmount = principalAmountNegative },
-            new() { PrincipalAmount = principalAmountZero }
-        };
-
-        var contract = new Contract
-        {
-            MonthlyLatePaymentInterestRate = monthlyLatePaymentInterestRate
+            new() { ReferenceDate = new DateOnly(2025, 4, 20), PrincipalAmount = 100m },
+            new() { ReferenceDate = new DateOnly(2025, 4, 21), PrincipalAmount = lastPrincipal }
         };
 
         // Act
-        var result = LatePaymentInterestPolicy.Calculate(lateDays, contract);
+        var result = LatePaymentInterestPolicy.Calculate(limits, contract);
 
         // Assert
-        result.Should().Be(expectedInterest);
+        result.Should().Be(0m);
     }
 
-    [Fact(DisplayName = "Calculate late payment interest when there are no late days")]
-    public void Calculate_late_payment_interest_when_there_are_no_late_days()
+    [Fact(DisplayName = "Calculate interest considers only the entry with the latest reference date")]
+    public void Calculate_interest_considers_only_latest_reference_date()
     {
         // Arrange
-        var lateDays = new List<DailyLimitUsageEntry>();
-
-        var contract = new Contract
+        const decimal monthlyLateRate = 0.07m;
+        var contract = new Contract { MonthlyLatePaymentInterestRate = monthlyLateRate };
+        var oldest = new DateOnly(2025, 1, 1);
+        var middle = new DateOnly(2025, 2, 1);
+        var newest = new DateOnly(2025, 3, 1);
+        var limits = new List<DailyLimitUsageEntry>
         {
-            MonthlyLatePaymentInterestRate = 0.05m
+            new() { ReferenceDate = middle, PrincipalAmount = 150m },
+            new() { ReferenceDate = newest, PrincipalAmount = 50m },
+            new() { ReferenceDate = oldest, PrincipalAmount = 300m }
         };
-
-        const decimal expectedInterest = 0m;
+        const decimal expected = 50m * (monthlyLateRate / 30);
 
         // Act
-        var result = LatePaymentInterestPolicy.Calculate(lateDays, contract);
+        var result = LatePaymentInterestPolicy.Calculate(limits, contract);
 
         // Assert
-        result.Should().Be(expectedInterest);
+        result.Should().Be(expected);
     }
 
-    [Fact(DisplayName = "Calculate late payment interest when all principal amounts are zero or negative")]
-    public void Calculate_late_payment_interest_when_all_principal_amounts_are_zero_or_negative()
+    [Fact(DisplayName = "Calculate interest throws when limits list is empty")]
+    public void Calculate_interest_throws_when_limits_list_is_empty()
     {
         // Arrange
-        var lateDays = new List<DailyLimitUsageEntry>
-        {
-            new() { PrincipalAmount = 0m },
-            new() { PrincipalAmount = -100m }
-        };
-
-        var contract = new Contract
-        {
-            MonthlyLatePaymentInterestRate = 0.04m
-        };
-
-        const decimal expectedInterest = 0m;
+        var contract = new Contract { MonthlyLatePaymentInterestRate = 0.04m };
+        var limits = new List<DailyLimitUsageEntry>();
 
         // Act
-        var result = LatePaymentInterestPolicy.Calculate(lateDays, contract);
+        Action act = () => LatePaymentInterestPolicy.Calculate(limits, contract);
 
         // Assert
-        result.Should().Be(expectedInterest);
+        act.Should().Throw<InvalidOperationException>()
+            .WithMessage("*Sequence contains no elements*");
     }
 }

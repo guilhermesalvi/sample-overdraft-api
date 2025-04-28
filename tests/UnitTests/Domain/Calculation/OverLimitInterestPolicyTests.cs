@@ -14,11 +14,12 @@ public class OverLimitInterestPolicyTests
         const decimal approvedOverdraftLimit = 1000m;
         const decimal monthlyOverLimitInterestRate = 0.3m;
         const decimal overLimitAmount = principalAmount - approvedOverdraftLimit;
-        const decimal expectedInterest = overLimitAmount * monthlyOverLimitInterestRate;
 
         var limits = new List<DailyLimitUsageEntry> { new() { PrincipalAmount = principalAmount } };
         var account = new Account { ApprovedOverdraftLimit = approvedOverdraftLimit };
         var contract = new Contract { MonthlyOverLimitInterestRate = monthlyOverLimitInterestRate };
+
+        var expectedInterest = overLimitAmount * contract.DailyOverLimitInterestRate;
 
         // Act
         var result = OverLimitInterestPolicy.Calculate(limits, account, contract);

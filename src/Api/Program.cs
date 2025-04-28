@@ -1,4 +1,5 @@
 using Api.Extensions;
+using Application.Extensions;
 using Infrastructure.Extensions;
 using Serilog;
 using Serilog.Core;
@@ -25,6 +26,7 @@ try
     builder.AddEndpoints();
     builder.Services.AddVersioning();
     builder.Services.AddDocumentation();
+    builder.Services.AddApplication();
     builder.Services.AddData(builder.Configuration);
 
     builder.Host.UseDefaultServiceProvider(options =>

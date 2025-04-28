@@ -4,11 +4,14 @@ namespace Domain.Calculation;
 
 public static class LatePaymentInterestPolicy
 {
-    public static decimal Calculate(List<DailyLimitUsageEntry> lateDays, Contract contract)
+    public static decimal Calculate(List<DailyLimitUsageEntry> limits, Contract contract)
     {
-        return lateDays
-            .Select(entry => entry.PrincipalAmount)
-            .Where(amount => amount > 0)
-            .Sum(amount => amount * contract.DailyLatePaymentInterestRate);
+        var lastLimit = limits
+            .OrderBy(x => x.ReferenceDate)
+            .Last();
+
+        return lastLimit.PrincipalAmount > 0
+            ? lastLimit.PrincipalAmount * contract.DailyLatePaymentInterestRate
+            : 0m;
     }
 }
