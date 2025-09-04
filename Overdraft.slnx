@@ -1,0 +1,16 @@
+<Solution>
+    <Folder Name="/aspire/">
+        <Project Path="aspire/AppHost/AppHost.csproj"/>
+        <Project Path="aspire/ServiceDefaults/ServiceDefaults.csproj"/>
+    </Folder>
+    <Folder Name="/Solution Items/">
+        <File Path="Directory.Packages.props"/>
+        <File Path=".gitattributes"/>
+        <File Path=".gitignore"/>
+        <File Path="readme.md"/>
+        <File Path=".editorconfig"/>
+    </Folder>
+    <Folder Name="/src/">
+        <Project Path="src\ClientEnrollment\ClientEnrollment.csproj" Type="Classic C#"/>
+    </Folder>
+</Solution>
