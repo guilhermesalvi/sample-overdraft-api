@@ -16,4 +16,8 @@
     <ProjectReference Include="..\..\src\ClientEnrollment\ClientEnrollment.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="init.sql" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
 </Project>

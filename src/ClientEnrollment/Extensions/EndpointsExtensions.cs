@@ -1,5 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 using Asp.Versioning;
+using ClientEnrollment.BankAccount.Endpoints.CreateBankAccount;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClientEnrollment.Extensions;
@@ -25,6 +26,9 @@ public static class EndpointsExtensions
             .MapGroup("/api/v{version:apiVersion}")
             .WithApiVersionSet(versionSet)
             .MapToApiVersion(1, 0);
+
+        var bankAccountV1 = routerV1.MapGroup("/bank-accounts");
+        bankAccountV1.MapCreateBankAccountEndpoint();
     }
 }
 

@@ -3,3 +3,12 @@
 GET {{host}}/health/ready/
 Accept: application/json
 
+###
+
+POST {{host}}/api/v1/bank-accounts/
+Content-Type: application/json
+
+{
+  "customerId": "fe5a6a2c-fd82-4808-ba5f-f01231c0db42",
+  "customerType": "individual"
+}

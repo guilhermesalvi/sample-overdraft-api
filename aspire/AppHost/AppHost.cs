@@ -5,10 +5,13 @@ var sql = builder
     .WithLifetime(ContainerLifetime.Persistent)
     .WithDataVolume("overdraft-sql");
 
+var initScriptPath = Path.Combine(AppContext.BaseDirectory, "init.sql");
+
 var clientEnrollmentDb = sql
     .AddDatabase(
         name: "client-enrollment-db",
-        databaseName: "ClientEnrollment");
+        databaseName: "ClientEnrollment")
+    .WithCreationScript(File.ReadAllText(initScriptPath));
 
 _ = builder
     .AddProject<Projects.ClientEnrollment>("client-enrollment-api")

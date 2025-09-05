@@ -1,15 +1,17 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <InvariantGlobalization>true</InvariantGlobalization>
+    <HybridGlobalization>true</HybridGlobalization>
     <PublishAot>true</PublishAot>
     <InterceptorsPreviewNamespaces>$(InterceptorsPreviewNamespaces);Dapper.AOT</InterceptorsPreviewNamespaces>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="AspNetCore.HealthChecks.SqlServer" />
+    <PackageReference Include="CSharpFunctionalExtensions" />
     <PackageReference Include="Dapper"/>
     <PackageReference Include="Dapper.AOT"/>
+    <PackageReference Include="FluentValidation" />
     <PackageReference Include="Microsoft.AspNetCore.HeaderPropagation"/>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi"/>
     <PackageReference Include="Microsoft.Data.SqlClient"/>
