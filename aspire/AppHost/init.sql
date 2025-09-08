@@ -13,11 +13,11 @@ GO
 IF OBJECT_ID(N'dbo.Accounts', N'U') IS NULL
 BEGIN
 CREATE TABLE dbo.Accounts(
-                             Id              UNIQUEIDENTIFIER NOT NULL PRIMARY KEY,
-                             CustomerId      UNIQUEIDENTIFIER NOT NULL,
-                             CustomerType    SMALLINT         NOT NULL,
-                             IsAccountActive BIT              NOT NULL,
-                             CreatedAt       DATETIMEOFFSET(7) NOT NULL 
+                             Id                     UNIQUEIDENTIFIER NOT NULL PRIMARY KEY,
+                             ClientId               UNIQUEIDENTIFIER NOT NULL,
+                             ClientType             SMALLINT         NOT NULL,
+                             IsBankAccountActive    BIT              NOT NULL,
+                             CreatedAt              DATETIMEOFFSET(7) NOT NULL 
       CONSTRAINT DF_Accounts_CreatedAt DEFAULT (SYSUTCDATETIME())
 );
 END;
@@ -29,7 +29,7 @@ GO
 IF OBJECT_ID(N'dbo.Contracts', N'U') IS NULL
 BEGIN
 CREATE TABLE dbo.Contracts(
-                              Id                               UNIQUEIDENTIFIER NOT NULL PRIMARY KEY,
+                              Id                                UNIQUEIDENTIFIER NOT NULL PRIMARY KEY,
                               AccountId                         UNIQUEIDENTIFIER NOT NULL,
                               SignatureDate                     DATETIMEOFFSET(7) NOT NULL,
                               IsContractActive                  BIT              NOT NULL,
@@ -62,25 +62,24 @@ GO
    ÍNDICES (idempotentes)
    ========================= */
 
--- Accounts.CustomerId
+-- Accounts.ClientId
 IF NOT EXISTS (
   SELECT 1 FROM sys.indexes 
-  WHERE name = N'IX_Accounts_CustomerId' AND object_id = OBJECT_ID(N'dbo.Accounts')
+  WHERE name = N'IX_Accounts_ClientId' AND object_id = OBJECT_ID(N'dbo.Accounts')
 )
 BEGIN
-CREATE INDEX IX_Accounts_CustomerId ON dbo.Accounts(CustomerId);
+CREATE INDEX IX_Accounts_ClientId ON dbo.Accounts (ClientId);
 END;
 GO
 
--- Accounts.IsAccountActive (FILTRADO em = 1)
+-- Accounts.IsBankAccountActive (FILTRADO em = 1)
 IF NOT EXISTS (
   SELECT 1 FROM sys.indexes 
-  WHERE name = N'IX_Accounts_IsAccountActive_1' AND object_id = OBJECT_ID(N'dbo.Accounts')
+  WHERE name = N'IX_Accounts_IsBankAccountActive_1' AND object_id = OBJECT_ID(N'dbo.Accounts')
 )
 BEGIN
-CREATE INDEX IX_Accounts_IsAccountActive_1
-    ON dbo.Accounts(IsAccountActive)
-    WHERE IsAccountActive = 1;
+CREATE INDEX IX_Accounts_IsBankAccountActive_1
+    ON dbo.Accounts (IsBankAccountActive) WHERE IsBankAccountActive = 1;
 END;
 GO
 

@@ -1,11 +1,9 @@
-@ClientEnrollment_HostAddress = http://localhost:5296
+@host = http://localhost:5296
 
-GET {{ClientEnrollment_HostAddress}}/todos/
-Accept: application/json
+POST {{host}}/api/v1/bank-accounts
+Content-Type: application/json
 
-###
-
-GET {{ClientEnrollment_HostAddress}}/todos/1
-Accept: application/json
-
-###
+{
+  "clientId": "692a212f-891b-4c16-a660-93d9355ea8e6",
+  "clientType": "individual"
+}

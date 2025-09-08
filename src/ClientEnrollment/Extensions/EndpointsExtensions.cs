@@ -1,6 +1,5 @@
-﻿using System.Text.Json.Serialization;
-using Asp.Versioning;
-using Microsoft.AspNetCore.Mvc;
+﻿using Asp.Versioning;
+using ClientEnrollment.Features.BankAccounts.Endpoints.CreateBankAccount;
 
 namespace ClientEnrollment.Extensions;
 
@@ -9,8 +8,6 @@ public static class EndpointsExtensions
     public static void AddEndpoints(this WebApplicationBuilder builder)
     {
         builder.Services.AddEndpointsApiExplorer();
-        builder.Services.ConfigureHttpJsonOptions(options =>
-            options.SerializerOptions.TypeInfoResolverChain.Insert(0, DefaultJsonSerializerContext.Default));
     }
 
     public static void MapEndpoints(this WebApplication app)
@@ -25,8 +22,8 @@ public static class EndpointsExtensions
             .MapGroup("/api/v{version:apiVersion}")
             .WithApiVersionSet(versionSet)
             .MapToApiVersion(1, 0);
+
+        var bankAccountsV1 = routerV1.MapGroup("bank-accounts");
+        bankAccountsV1.MapCreateBankAccountEndpoint();
     }
 }
-
-[JsonSerializable(typeof(ProblemDetails))]
-internal partial class DefaultJsonSerializerContext : JsonSerializerContext;

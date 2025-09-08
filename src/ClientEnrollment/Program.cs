@@ -1,4 +1,5 @@
 using ClientEnrollment.Extensions;
+using ClientEnrollment.Features.BankAccounts;
 using ServiceDefaults;
 
 var builder = WebApplication.CreateSlimBuilder(args);
@@ -11,6 +12,7 @@ builder.AddEndpoints();
 builder.Services.AddVersioning();
 builder.Services.AddOpenApi();
 builder.AddData();
+builder.AddBankAccounts();
 
 builder.Host.UseDefaultServiceProvider(options =>
 {
@@ -26,6 +28,7 @@ app.UseExceptionHandler();
 if (app.Environment.IsProduction())
     app.UseHttpsRedirection();
 
+app.UseJsonBodyProblemDetails();
 app.MapHealthEndpoints();
 app.UseBaggageEnrichment();
 app.UseHeaderPropagation();
