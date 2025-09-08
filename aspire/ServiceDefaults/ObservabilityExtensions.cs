@@ -14,13 +14,13 @@ using OpenTelemetry.Trace;
 
 namespace ServiceDefaults;
 
-public static class Extensions
+public static class ObservabilityExtensions
 {
     private const string LivePath = "/health/live";
     private const string ReadyPath = "/health/ready";
     private const string BaggagePref = "baggage.";
 
-    public static void AddServiceDefaults(this IHostApplicationBuilder builder)
+    public static void AddObservability(this IHostApplicationBuilder builder)
     {
         var settings = OtelSettings.From(builder);
         ConfigureHealthChecks(builder.Services);
@@ -28,7 +28,7 @@ public static class Extensions
         builder.Services.AddSingleton(_ => new ActivitySource(settings.ActivitySourceName));
     }
 
-    public static void MapDefaultEndpoints(this WebApplication app)
+    public static void MapHealthEndpoints(this WebApplication app)
     {
         app.MapHealthChecks(LivePath, new HealthCheckOptions
         {
@@ -43,7 +43,7 @@ public static class Extensions
         });
     }
 
-    public static void UseBaggageLoggingScope(this WebApplication app)
+    public static void UseBaggageEnrichment(this WebApplication app)
     {
         var logger = app.Services.GetRequiredService<ILoggerFactory>().CreateLogger("Telemetry.BaggageScope");
 

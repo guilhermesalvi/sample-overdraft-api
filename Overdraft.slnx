@@ -10,4 +10,7 @@
     <File Path=".gitignore" />
     <File Path="Directory.Packages.props" />
   </Folder>
+  <Folder Name="/src/">
+    <Project Path="src\ClientEnrollment\ClientEnrollment.csproj" Type="Classic C#"/>
+  </Folder>
 </Solution>

@@ -9,6 +9,17 @@
 
   <ItemGroup>
     <PackageReference Include="Aspire.Hosting.AppHost"/>
+    <PackageReference Include="Aspire.Hosting.SqlServer" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\ClientEnrollment\ClientEnrollment.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="init.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
