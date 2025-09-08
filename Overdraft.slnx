@@ -1,0 +1,13 @@
+<Solution>
+  <Folder Name="/aspire/">
+    <Project Path="aspire/AppHost/AppHost.csproj" />
+    <Project Path="aspire/ServiceDefaults/ServiceDefaults.csproj" />
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path=".gitattributes" />
+    <File Path="readme.md" />
+    <File Path=".gitignore" />
+    <File Path="Directory.Packages.props" />
+  </Folder>
+</Solution>
