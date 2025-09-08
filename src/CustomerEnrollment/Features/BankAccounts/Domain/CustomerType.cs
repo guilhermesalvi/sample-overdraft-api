@@ -1,7 +1,7 @@
-﻿namespace ClientEnrollment.Features.BankAccounts.Domain;
+﻿namespace CustomerEnrollment.Features.BankAccounts.Domain;
 
 [Flags]
-public enum ClientType : short
+public enum CustomerType : short
 {
     None = 0,
     Individual = 1,

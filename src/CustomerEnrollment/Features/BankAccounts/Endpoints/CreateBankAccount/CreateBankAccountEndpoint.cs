@@ -1,10 +1,10 @@
-﻿using ClientEnrollment.CrossCutting.Filters;
-using ClientEnrollment.Features.BankAccounts.Domain;
-using ClientEnrollment.Features.BankAccounts.Repositories;
+﻿using CustomerEnrollment.CrossCutting.Filters;
+using CustomerEnrollment.Features.BankAccounts.Domain;
+using CustomerEnrollment.Features.BankAccounts.Repositories;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ClientEnrollment.Features.BankAccounts.Endpoints.CreateBankAccount;
+namespace CustomerEnrollment.Features.BankAccounts.Endpoints.CreateBankAccount;
 
 public static class CreateBankAccountEndpoint
 {

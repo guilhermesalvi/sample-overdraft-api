@@ -1,7 +1,7 @@
 ﻿using Asp.Versioning;
-using ClientEnrollment.Features.BankAccounts.Endpoints.CreateBankAccount;
+using CustomerEnrollment.Features.BankAccounts.Endpoints.CreateBankAccount;
 
-namespace ClientEnrollment.Extensions;
+namespace CustomerEnrollment.Extensions;
 
 public static class EndpointsExtensions
 {

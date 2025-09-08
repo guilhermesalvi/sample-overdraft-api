@@ -4,6 +4,6 @@ POST {{host}}/api/v1/bank-accounts
 Content-Type: application/json
 
 {
-  "clientId": "692a212f-891b-4c16-a660-93d9355ea8e6",
-  "clientType": "individual"
+  "customerId": "692a212f-891b-4c16-a660-93d9355ea8e6",
+  "customerType": "individual"
 }

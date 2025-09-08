@@ -7,17 +7,17 @@ var sql = builder
 
 var initScriptPath = Path.Combine(AppContext.BaseDirectory, "init.sql");
 
-var clientEnrollmentDb = sql
+var customerEnrollmentDb = sql
     .AddDatabase(
-        name: "client-enrollment-db",
-        databaseName: "ClientEnrollment")
+        name: "customer-enrollment-db",
+        databaseName: "CustomerEnrollment")
     .WithCreationScript(File.ReadAllText(initScriptPath));
 
 _ = builder
-    .AddProject<Projects.ClientEnrollment>("client-enrollment-api")
+    .AddProject<Projects.CustomerEnrollment>("customer-enrollment-api")
     .WithHttpHealthCheck("/health/ready")
     .WithEnvironment("ASPNETCORE_ENVIRONMENT", builder.Environment.EnvironmentName)
-    .WithReference(clientEnrollmentDb)
-    .WaitFor(clientEnrollmentDb);
+    .WithReference(customerEnrollmentDb)
+    .WaitFor(customerEnrollmentDb);
 
 builder.Build().Run();

@@ -1,10 +1,10 @@
 ﻿using System.Text.Json.Serialization;
-using ClientEnrollment.Features.BankAccounts.Domain;
-using ClientEnrollment.Features.BankAccounts.Endpoints.CreateBankAccount;
-using ClientEnrollment.Features.BankAccounts.Repositories;
+using CustomerEnrollment.Features.BankAccounts.Domain;
+using CustomerEnrollment.Features.BankAccounts.Endpoints.CreateBankAccount;
+using CustomerEnrollment.Features.BankAccounts.Repositories;
 using FluentValidation;
 
-namespace ClientEnrollment.Features.BankAccounts;
+namespace CustomerEnrollment.Features.BankAccounts;
 
 public static class BankAccountExtensions
 {
@@ -23,6 +23,6 @@ public static class BankAccountExtensions
     UseStringEnumConverter = true
 )]
 [JsonSerializable(typeof(BankAccount))]
-[JsonSerializable(typeof(ClientType))]
+[JsonSerializable(typeof(CustomerType))]
 [JsonSerializable(typeof(CreateBankAccountRequest))]
 internal partial class BankAccountsJsonSerializerContext : JsonSerializerContext;

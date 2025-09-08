@@ -1,8 +1,8 @@
-﻿namespace ClientEnrollment.Features.BankAccounts.Domain;
+﻿namespace CustomerEnrollment.Features.BankAccounts.Domain;
 
 public record BankAccount(
-    Guid ClientId,
-    ClientType ClientType,
+    Guid CustomerId,
+    CustomerType CustomerType,
     bool IsBankAccountActive)
 {
     public Guid Id { get; private init; } = Guid.CreateVersion7();

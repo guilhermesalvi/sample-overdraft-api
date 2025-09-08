@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace ClientEnrollment.CrossCutting.Filters;
+namespace CustomerEnrollment.CrossCutting.Filters;
 
 public sealed class ValidationFilter<TRequest> : IEndpointFilter where TRequest : class
 {

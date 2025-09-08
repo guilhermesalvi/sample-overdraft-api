@@ -1,5 +1,5 @@
-using ClientEnrollment.Extensions;
-using ClientEnrollment.Features.BankAccounts;
+using CustomerEnrollment.Extensions;
+using CustomerEnrollment.Features.BankAccounts;
 using ServiceDefaults;
 
 var builder = WebApplication.CreateSlimBuilder(args);

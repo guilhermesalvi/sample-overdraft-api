@@ -1,10 +1,10 @@
 -- DB opcional (remova se já existir/for gerenciado fora)
-IF DB_ID(N'ClientEnrollment') IS NULL
+IF DB_ID(N'CustomerEnrollment') IS NULL
 BEGIN
-  CREATE DATABASE [ClientEnrollment];
+  CREATE DATABASE [CustomerEnrollment];
 END;
 GO
-USE [ClientEnrollment];
+USE [CustomerEnrollment];
 GO
 
 /* =========================
@@ -14,8 +14,8 @@ IF OBJECT_ID(N'dbo.Accounts', N'U') IS NULL
 BEGIN
 CREATE TABLE dbo.Accounts(
                              Id                     UNIQUEIDENTIFIER NOT NULL PRIMARY KEY,
-                             ClientId               UNIQUEIDENTIFIER NOT NULL,
-                             ClientType             SMALLINT         NOT NULL,
+                             CustomerId               UNIQUEIDENTIFIER NOT NULL,
+                             CustomerType             SMALLINT         NOT NULL,
                              IsBankAccountActive    BIT              NOT NULL,
                              CreatedAt              DATETIMEOFFSET(7) NOT NULL 
       CONSTRAINT DF_Accounts_CreatedAt DEFAULT (SYSUTCDATETIME())
@@ -62,13 +62,13 @@ GO
    ÍNDICES (idempotentes)
    ========================= */
 
--- Accounts.ClientId
+-- Accounts.CustomerId
 IF NOT EXISTS (
   SELECT 1 FROM sys.indexes 
-  WHERE name = N'IX_Accounts_ClientId' AND object_id = OBJECT_ID(N'dbo.Accounts')
+  WHERE name = N'IX_Accounts_CustomerId' AND object_id = OBJECT_ID(N'dbo.Accounts')
 )
 BEGIN
-CREATE INDEX IX_Accounts_ClientId ON dbo.Accounts (ClientId);
+CREATE INDEX IX_Accounts_CustomerId ON dbo.Accounts (CustomerId);
 END;
 GO
 
