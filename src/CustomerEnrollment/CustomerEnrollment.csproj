@@ -1,24 +1,18 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
-    <PropertyGroup>
-      <PublishAot>true</PublishAot>
-      <HybridGlobalization>true</HybridGlobalization>
-      <InterceptorsPreviewNamespaces>$(InterceptorsPreviewNamespaces);Dapper.AOT</InterceptorsPreviewNamespaces>
-    </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\aspire\ServiceDefaults\ServiceDefaults.csproj"/>
+  </ItemGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\..\aspire\ServiceDefaults\ServiceDefaults.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <PackageReference Include="AspNetCore.HealthChecks.SqlServer" />
-      <PackageReference Include="CSharpFunctionalExtensions" />
-      <PackageReference Include="Dapper" />
-      <PackageReference Include="Dapper.AOT" />
-      <PackageReference Include="FluentValidation" />
-      <PackageReference Include="Microsoft.AspNetCore.HeaderPropagation" />
-      <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
-      <PackageReference Include="Microsoft.Data.SqlClient" />
-    </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="AspNetCore.HealthChecks.SqlServer"/>
+    <PackageReference Include="CSharpFunctionalExtensions"/>
+    <PackageReference Include="Dapper"/>
+    <PackageReference Include="Dapper.SqlBuilder" />
+    <PackageReference Include="FluentValidation"/>
+    <PackageReference Include="Microsoft.AspNetCore.HeaderPropagation"/>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi"/>
+    <PackageReference Include="Microsoft.Data.SqlClient"/>
+  </ItemGroup>
 
 </Project>

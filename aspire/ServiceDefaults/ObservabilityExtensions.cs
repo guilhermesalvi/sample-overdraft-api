@@ -1,4 +1,6 @@
 ﻿using System.Diagnostics;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Http;
@@ -22,6 +24,16 @@ public static class ObservabilityExtensions
 
     public static void AddObservability(this IHostApplicationBuilder builder)
     {
+        builder.Services.ConfigureHttpJsonOptions(o =>
+        {
+            o.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+            o.SerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+            o.SerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
+
+            o.SerializerOptions.TypeInfoResolverChain.Add(HealthChecksJsonSerializerContext.Default);
+            o.SerializerOptions.TypeInfoResolverChain.Add(ProblemJsonSerializerContext.Default);
+        });
+
         var settings = OtelSettings.From(builder);
         ConfigureHealthChecks(builder.Services);
         ConfigureOpenTelemetry(builder, settings);

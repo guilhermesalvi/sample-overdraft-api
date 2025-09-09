@@ -1,18 +1,18 @@
 using CustomerEnrollment.Extensions;
-using CustomerEnrollment.Features.BankAccounts;
+using CustomerEnrollment.Features;
 using ServiceDefaults;
 
-var builder = WebApplication.CreateSlimBuilder(args);
+var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.AddObservability();
 builder.Services.AddHeaderPropagation(options => options.Headers.Add("X-Correlation-ID"));
 builder.Services.AddProblemDetails();
-builder.AddEndpoints();
+builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddVersioning();
 builder.Services.AddOpenApi();
 builder.AddData();
-builder.AddBankAccounts();
+builder.AddFeatures();
 
 builder.Host.UseDefaultServiceProvider(options =>
 {
@@ -28,11 +28,11 @@ app.UseExceptionHandler();
 if (app.Environment.IsProduction())
     app.UseHttpsRedirection();
 
-app.UseJsonBodyProblemDetails();
+app.UseJsonDeserializationProblemDetails();
 app.MapHealthEndpoints();
 app.UseBaggageEnrichment();
 app.UseHeaderPropagation();
-app.MapEndpoints();
+app.MapFeatureEndpoints();
 
 if (app.Environment.IsDevelopment())
     app.MapOpenApi();
