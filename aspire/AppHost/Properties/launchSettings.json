@@ -10,7 +10,12 @@
         "ASPNETCORE_ENVIRONMENT": "Development",
         "DOTNET_ENVIRONMENT": "Development",
         "ASPIRE_DASHBOARD_OTLP_ENDPOINT_URL": "http://localhost:19046",
-        "ASPIRE_RESOURCE_SERVICE_ENDPOINT_URL": "http://localhost:20251"
+        "ASPIRE_RESOURCE_SERVICE_ENDPOINT_URL": "http://localhost:20251",
+        "OTEL_SERVICE_VERSION": "0.0.1",
+        "OTEL_HEAD_RATIO": "1.0",
+        "OTEL_EXPORTER_OTLP_COMPRESSION": "gzip",
+        "OTEL_BSP_MAX_EXPORT_BATCH_SIZE": "512",
+        "OTEL_BSP_SCHEDULE_DELAY": "00:00:02"
       }
     }
   }

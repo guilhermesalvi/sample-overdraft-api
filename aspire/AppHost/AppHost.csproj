@@ -12,6 +12,12 @@
 
   <ItemGroup>
     <PackageReference Include="Aspire.Hosting.AppHost" />
+    <PackageReference Include="Aspire.Hosting.SqlServer" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\CustomerEnrollment\CustomerEnrollment.csproj" />
+    <ProjectReference Include="..\..\src\DataMigration\DataMigration.csproj" />
   </ItemGroup>
 
 </Project>

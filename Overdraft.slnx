@@ -10,4 +10,11 @@
     <File Path="readme.md" />
     <File Path="Directory.Packages.props" />
   </Folder>
+  <Folder Name="/src/">
+    <Project Path="src\CustomerEnrollment\CustomerEnrollment.csproj" Type="Classic C#" />
+    <Project Path="src\DataMigration\DataMigration.csproj" Type="Classic C#" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests\UnitTests\UnitTests.csproj" Type="Classic C#" />
+  </Folder>
 </Solution>
