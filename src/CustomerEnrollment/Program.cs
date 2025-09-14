@@ -1,4 +1,5 @@
-using CustomerEnrollment.Extensions;
+using CustomerEnrollment.CrossCutting.Database;
+using CustomerEnrollment.OverdraftAccounts;
 using ServiceDefaults;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,7 +11,8 @@ builder.Services.AddProblemDetails();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddVersioning();
 builder.Services.AddOpenApi();
-builder.AddData();
+builder.AddDatabase();
+builder.AddOverdraftAccounts();
 
 builder.Host.UseDefaultServiceProvider(options =>
 {
@@ -30,6 +32,7 @@ app.UseJsonDeserializationProblemDetails();
 app.MapHealthEndpoints();
 app.UseBaggageEnrichment();
 app.UseHeaderPropagation();
+app.MapOverdraftAccountEndpoints();
 
 if (app.Environment.IsDevelopment())
     app.MapOpenApi();

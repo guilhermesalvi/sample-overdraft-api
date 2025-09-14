@@ -1,6 +1,0 @@
-@CustomerEnrollment_HostAddress = http://localhost:5197
-
-GET {{CustomerEnrollment_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

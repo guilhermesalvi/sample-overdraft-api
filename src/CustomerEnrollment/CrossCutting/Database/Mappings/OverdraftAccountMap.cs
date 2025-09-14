@@ -1,8 +1,8 @@
-﻿using CustomerEnrollment.Models;
+﻿using CustomerEnrollment.OverdraftAccounts.Aggregates;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace CustomerEnrollment.Data.Mappings;
+namespace CustomerEnrollment.CrossCutting.Database.Mappings;
 
 public class OverdraftAccountMap : IEntityTypeConfiguration<OverdraftAccount>
 {
@@ -11,12 +11,12 @@ public class OverdraftAccountMap : IEntityTypeConfiguration<OverdraftAccount>
         builder.ToTable("OverdraftAccounts").HasKey(x => x.Id);
 
         builder.HasIndex(x => x.Id);
-        builder.HasIndex(x => x.IsBankAccountActive);
+        builder.HasIndex(x => x.IsOverdraftAccountActive);
 
         builder.Property(x => x.Id).HasColumnType("uniqueidentifier");
         builder.Property(x => x.CustomerId).HasColumnType("uniqueidentifier");
         builder.Property(x => x.CustomerType).HasColumnType("int");
-        builder.Property(x => x.IsBankAccountActive).HasColumnType("bit");
+        builder.Property(x => x.IsOverdraftAccountActive).HasColumnType("bit");
         builder.Property(x => x.CreatedAt).HasColumnType("datetimeoffset");
     }
 }

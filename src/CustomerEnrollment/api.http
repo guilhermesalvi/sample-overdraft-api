@@ -1,0 +1,14 @@
+@Host = http://localhost:5197
+
+POST {{Host}}/api/v1/overdraft-accounts/
+Content-Type: application/json
+
+{
+  "customerId": "63c0523a-e78a-4cca-a25b-77b07b1b5d9f",
+  "customerType": "individual"
+}
+
+###
+
+GET {{Host}}/api/v1/overdraft-accounts?customerId=63c0523a-e78a-4cca-a25b-77b07b1b5d9f
+

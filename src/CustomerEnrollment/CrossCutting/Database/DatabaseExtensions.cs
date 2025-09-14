@@ -1,11 +1,11 @@
-﻿using CustomerEnrollment.Data.Context;
+﻿using CustomerEnrollment.CrossCutting.Database.Context;
 using Microsoft.EntityFrameworkCore;
 
-namespace CustomerEnrollment.Extensions;
+namespace CustomerEnrollment.CrossCutting.Database;
 
-public static class DataExtensions
+public static class DatabaseExtensions
 {
-    public static void AddData(this WebApplicationBuilder builder)
+    public static void AddDatabase(this WebApplicationBuilder builder)
     {
         var connectionString = builder.Configuration.GetConnectionString("customer-enrollment-db")
                                ?? throw new InvalidOperationException(

@@ -1,4 +1,4 @@
-﻿namespace CustomerEnrollment.Models;
+﻿namespace CustomerEnrollment.OverdraftAccounts.Aggregates;
 
 [Flags]
 public enum CustomerType : short

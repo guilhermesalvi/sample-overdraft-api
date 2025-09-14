@@ -1,8 +1,10 @@
-﻿using CustomerEnrollment.Models;
+﻿using CustomerEnrollment.OverdraftAccounts;
+using CustomerEnrollment.OverdraftAccounts.Aggregates;
+using CustomerEnrollment.OverdraftContracts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace CustomerEnrollment.Data.Mappings;
+namespace CustomerEnrollment.CrossCutting.Database.Mappings;
 
 public class OverdraftContractMap : IEntityTypeConfiguration<OverdraftContract>
 {

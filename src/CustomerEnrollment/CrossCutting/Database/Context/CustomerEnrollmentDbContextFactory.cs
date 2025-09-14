@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
-namespace CustomerEnrollment.Data.Context;
+namespace CustomerEnrollment.CrossCutting.Database.Context;
 
 public sealed class CustomerEnrollmentDbContextFactory : IDesignTimeDbContextFactory<CustomerEnrollmentDbContext>
 {

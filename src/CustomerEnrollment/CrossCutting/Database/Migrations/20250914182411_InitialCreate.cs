@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace CustomerEnrollment.Data.Migrations
+namespace CustomerEnrollment.CrossCutting.Database.Migrations
 {
     /// <inheritdoc />
     public partial class InitialCreate : Migration
@@ -16,10 +16,10 @@ namespace CustomerEnrollment.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     CustomerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CustomerType = table.Column<int>(type: "int", nullable: false),
-                    IsBankAccountActive = table.Column<bool>(type: "bit", nullable: false),
-                    CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
+                    IsOverdraftAccountActive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -31,6 +31,7 @@ namespace CustomerEnrollment.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     OverdraftAccountId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     GracePeriodDays = table.Column<int>(type: "int", nullable: false),
                     MonthlyInterestRate = table.Column<decimal>(type: "decimal(19,8)", nullable: false),
@@ -38,7 +39,6 @@ namespace CustomerEnrollment.Data.Migrations
                     OverLimitFixedFee = table.Column<decimal>(type: "decimal(19,8)", nullable: false),
                     MonthlyLatePaymentInterestRate = table.Column<decimal>(type: "decimal(19,8)", nullable: false),
                     LatePaymentPenaltyRate = table.Column<decimal>(type: "decimal(19,8)", nullable: false),
-                    CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     IsOverdraftContractActive = table.Column<bool>(type: "bit", nullable: false),
                     SignatureDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
                     CanceledAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true)
@@ -60,9 +60,9 @@ namespace CustomerEnrollment.Data.Migrations
                 column: "Id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OverdraftAccounts_IsBankAccountActive",
+                name: "IX_OverdraftAccounts_IsOverdraftAccountActive",
                 table: "OverdraftAccounts",
-                column: "IsBankAccountActive");
+                column: "IsOverdraftAccountActive");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OverdraftContracts_Id",
