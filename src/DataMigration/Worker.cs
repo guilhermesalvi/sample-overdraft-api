@@ -1,5 +1,5 @@
 using System.Diagnostics;
-using CustomerEnrollment.Data.Context;
+using CustomerEnrollment.CrossCutting.Database.Context;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataMigration;

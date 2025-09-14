@@ -1,4 +1,4 @@
-using CustomerEnrollment.Data.Context;
+using CustomerEnrollment.CrossCutting.Database.Context;
 using DataMigration;
 using ServiceDefaults;
 
